@@ -152,7 +152,7 @@ def export_onnx(model, im, file, opset, dynamic, simplify, prefix=colorstr('ONNX
         im.cpu() if dynamic else im,
         f,
         verbose=False,
-        opset_version=opset,
+        opset_version=12,
         do_constant_folding=True,  # WARNING: DNN inference with torch>=1.12 may require do_constant_folding=False
         input_names=['images'],
         output_names=output_names,

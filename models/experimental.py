@@ -9,6 +9,7 @@ import torch
 import torch.nn as nn
 
 from utils.downloads import attempt_download
+from utils import activations
 
 
 class Sum(nn.Module):
@@ -51,7 +52,8 @@ class MixConv2d(nn.Module):
         self.m = nn.ModuleList([
             nn.Conv2d(c1, int(c_), k, s, k // 2, groups=math.gcd(c1, int(c_)), bias=False) for k, c_ in zip(k, c_)])
         self.bn = nn.BatchNorm2d(c2)
-        self.act = nn.SiLU()
+        # self.act = nn.SiLU()
+        self.act = activations.SiLU()
 
     def forward(self, x):
         return self.act(self.bn(torch.cat([m(x) for m in self.m], 1)))
@@ -90,7 +92,8 @@ def attempt_load(weights, device=None, inplace=True, fuse=True):
     # Module compatibility updates
     for m in model.modules():
         t = type(m)
-        if t in (nn.Hardswish, nn.LeakyReLU, nn.ReLU, nn.ReLU6, nn.SiLU, Detect, Model):
+        # if t in (nn.Hardswish, nn.LeakyReLU, nn.ReLU, nn.ReLU6, nn.SiLU, Detect, Model):
+        if t in (nn.Hardswish, nn.LeakyReLU, nn.ReLU, nn.ReLU6, activations.SiLU, Detect, Model):
             m.inplace = inplace  # torch 1.7.0 compatibility
             if t is Detect and not isinstance(m.anchor_grid, list):
                 delattr(m, 'anchor_grid')

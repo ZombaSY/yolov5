@@ -33,6 +33,7 @@ from models.experimental import MixConv2d, attempt_load
 from models.yolo import Detect, Segment
 from utils.activations import SiLU
 from utils.general import LOGGER, make_divisible, print_args
+from utils import activations
 
 
 class TFBN(keras.layers.Layer):
@@ -539,13 +540,15 @@ class AgnosticNMS(keras.layers.Layer):
         return padded_boxes, padded_scores, padded_classes, valid_detections
 
 
-def activations(act=nn.SiLU):
+# def activations(act=nn.SiLU):
+def activations(act=activations.SiLU):
     # Returns TF activation from input PyTorch activation
     if isinstance(act, nn.LeakyReLU):
         return lambda x: keras.activations.relu(x, alpha=0.1)
     elif isinstance(act, nn.Hardswish):
         return lambda x: x * tf.nn.relu6(x + 3) * 0.166666667
-    elif isinstance(act, (nn.SiLU, SiLU)):
+    # elif isinstance(act, (nn.SiLU, SiLU)):
+    elif isinstance(act, (activations.SiLU, SiLU)):
         return lambda x: keras.activations.swish(x)
     else:
         raise Exception(f'no matching TensorFlow activation found for PyTorch activation {act}')
