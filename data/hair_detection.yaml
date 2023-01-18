@@ -8,18 +8,18 @@
 
 
 # Train/val/test sets as 1) dir: path/to/imgs, 2) file: path/to/imgs.txt, or 3) list: [path/to/imgs1, path/to/imgs2, ..]
-path: /mnt/prj/users/ssy/dataset/Lululab/scalp/230104_detection/VOC
-train: # train images (relative to 'path')  16551 images
+path: /mnt/prj/users/ssy/dataset/Lululab/scalp/230118_labeler_round_1
+train: # train images (relative to 'path')
   - train
-val: # val images (relative to 'path')  4952 images
+val: # val images (relative to 'path')
   - val
 test: # test images (optional)
 
 # Classes
 names:
-  0: hair0
+  0: hair2
   1: hair1
-  2: hair2
+  2: hair_white
   3: hair3
   4: hair4
   5: hair5

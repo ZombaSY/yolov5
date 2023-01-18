@@ -167,8 +167,8 @@ class Loggers():
         if self.plots:
             plot_labels(labels, names, self.save_dir)
             paths = self.save_dir.glob('*labels*.jpg')  # training labels
-            if self.wandb:
-                self.wandb.log({"Labels": [wandb.Image(str(x), caption=x.name) for x in paths]})
+            # if self.wandb:
+            #     self.wandb.log({"Labels": [wandb.Image(str(x), caption=x.name) for x in paths]})
             # if self.clearml:
             #    pass  # ClearML saves these images automatically using hooks
             if self.comet_logger:
@@ -186,8 +186,8 @@ class Loggers():
                     log_tensorboard_graph(self.tb, model, imgsz=(self.opt.imgsz, self.opt.imgsz))
             if ni == 10 and (self.wandb or self.clearml):
                 files = sorted(self.save_dir.glob('train*.jpg'))
-                if self.wandb:
-                    self.wandb.log({'Mosaics': [wandb.Image(str(f), caption=f.name) for f in files if f.exists()]})
+                # if self.wandb:
+                #     self.wandb.log({'Mosaics': [wandb.Image(str(f), caption=f.name) for f in files if f.exists()]})
                 if self.clearml:
                     self.clearml.log_debug_samples(files, title='Mosaics')
 
@@ -221,8 +221,8 @@ class Loggers():
         # Callback runs on val end
         if self.wandb or self.clearml:
             files = sorted(self.save_dir.glob('val*.jpg'))
-            if self.wandb:
-                self.wandb.log({"Validation": [wandb.Image(str(f), caption=f.name) for f in files]})
+            # if self.wandb:
+            #     self.wandb.log({"Validation": [wandb.Image(str(f), caption=f.name) for f in files]})
             if self.clearml:
                 self.clearml.log_debug_samples(files, title='Validation')
 
@@ -289,7 +289,7 @@ class Loggers():
 
         if self.wandb:
             self.wandb.log(dict(zip(self.keys[3:10], results)))
-            self.wandb.log({"Results": [wandb.Image(str(f), caption=f.name) for f in files]})
+            # self.wandb.log({"Results": [wandb.Image(str(f), caption=f.name) for f in files]})
             # Calling wandb.log. TODO: Refactor this into WandbLogger.log_model
             if not self.opt.evolve:
                 wandb.log_artifact(str(best if best.exists() else last),
@@ -369,8 +369,8 @@ class GenericLogger:
             for f in files:
                 self.tb.add_image(f.stem, cv2.imread(str(f))[..., ::-1], epoch, dataformats='HWC')
 
-        if self.wandb:
-            self.wandb.log({name: [wandb.Image(str(f), caption=f.name) for f in files]}, step=epoch)
+        # if self.wandb:
+        #     self.wandb.log({name: [wandb.Image(str(f), caption=f.name) for f in files]}, step=epoch)
 
     def log_graph(self, model, imgsz=(640, 640)):
         # Log model graph to all loggers
