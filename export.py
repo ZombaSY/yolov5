@@ -59,6 +59,9 @@ from pathlib import Path
 import pandas as pd
 import torch
 from torch.utils.mobile_optimizer import optimize_for_mobile
+from export_dir.onnx2pb import onnx2pb
+from export_dir.pb2tflite import pb2tflite
+
 
 FILE = Path(__file__).resolve()
 ROOT = FILE.parents[0]  # YOLOv5 root directory
@@ -646,6 +649,12 @@ def parse_opt():
 def main(opt):
     for opt.weights in (opt.weights if isinstance(opt.weights, list) else [opt.weights]):
         run(**vars(opt))
+    # import pdb
+    # pdb.set_trace()
+    # fn, ext = os.path.splitext(os.path.normpath(opt.weights[0]).split(os.sep)[-1])
+
+    onnx2pb(opt.weights)
+    pb2tflite(opt.weights)
 
 
 if __name__ == "__main__":

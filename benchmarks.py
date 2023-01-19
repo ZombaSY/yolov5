@@ -39,7 +39,7 @@ if str(ROOT) not in sys.path:
     sys.path.append(str(ROOT))  # add ROOT to PATH
 # ROOT = ROOT.relative_to(Path.cwd())  # relative
 
-import export
+import export_dir
 from models.experimental import attempt_load
 from models.yolo import SegmentationModel
 from segment.val import run as val_seg
@@ -63,7 +63,7 @@ def run(
     y, t = [], time.time()
     device = select_device(device)
     model_type = type(attempt_load(weights, fuse=False))  # DetectionModel, SegmentationModel, etc.
-    for i, (name, f, suffix, cpu, gpu) in export.export_formats().iterrows():  # index, (name, file, suffix, CPU, GPU)
+    for i, (name, f, suffix, cpu, gpu) in export_dir.export_formats().iterrows():  # index, (name, file, suffix, CPU, GPU)
         try:
             assert i not in (9, 10), 'inference not supported'  # Edge TPU and TF.js are unsupported
             assert i != 5 or platform.system() == 'Darwin', 'inference only supported on macOS>=10.13'  # CoreML
@@ -76,7 +76,7 @@ def run(
             if f == '-':
                 w = weights  # PyTorch format
             else:
-                w = export.run(weights=weights, imgsz=[imgsz], include=[f], device=device, half=half)[-1]  # all others
+                w = export_dir.run(weights=weights, imgsz=[imgsz], include=[f], device=device, half=half)[-1]  # all others
             assert suffix in str(w), 'export failed'
 
             # Validate
@@ -124,10 +124,10 @@ def test(
 ):
     y, t = [], time.time()
     device = select_device(device)
-    for i, (name, f, suffix, gpu) in export.export_formats().iterrows():  # index, (name, file, suffix, gpu-capable)
+    for i, (name, f, suffix, gpu) in export_dir.export_formats().iterrows():  # index, (name, file, suffix, gpu-capable)
         try:
             w = weights if f == '-' else \
-                export.run(weights=weights, imgsz=[imgsz], include=[f], device=device, half=half)[-1]  # weights
+                export_dir.run(weights=weights, imgsz=[imgsz], include=[f], device=device, half=half)[-1]  # weights
             assert suffix in str(w), 'export failed'
             y.append([name, True])
         except Exception:

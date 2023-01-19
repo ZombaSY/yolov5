@@ -5,7 +5,7 @@ import os
 
 
 INPUT_PATH = 'data/images/scalp2.jpg'
-model_tf = tf.lite.Interpreter('pretrained/sunyong.tflite')
+model_tf = tf.lite.Interpreter('pretrained/best.tflite')
 
 
 # function for non-utf-8 string
@@ -51,11 +51,30 @@ def prediction_to_box(pred, img):
     for i in range(len(obj_boxes)):
         p1 = [int(obj_boxes[i][0]), int(obj_boxes[i][1])]
         p2 = [int(obj_boxes[i][2]), int(obj_boxes[i][3])]
-        if obj_classes[i] == 0:     # class
-            cv2.rectangle(img, p1, p2, (0, 0, 255), 5)
-        else:
-            cv2.rectangle(img, p1, p2, (255, 0, 0), 5)
-        cv2.putText(img, f'Class {obj_classes[i]} {str(class_score[i][5 + obj_classes[i]])[:4]}', (p1[0], p1[1] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 128), 2)
+        # if obj_classes[i] == 0:     # class
+        #     cv2.rectangle(img, p1, p2, (0, 0, 255), 5)
+        # else:
+        #     cv2.rectangle(img, p1, p2, (255, 0, 0), 5)
+        # cv2.putText(img, f'Class {obj_classes[i]} {str(class_score[i][5 + obj_classes[i]])[:4]}', (p1[0], p1[1] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 128), 2)
+
+        if obj_classes[i] == 0:
+            cv2.putText(img, f'hair1 {obj_classes[i]} {str(class_score[i][5 + obj_classes[i]])[:4]}', (p1[0], p1[1] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
+            cv2.rectangle(img, p1, p2, (0, 0, 255), 3)
+        elif obj_classes[i] == 1:
+            cv2.putText(img, f'hair2 {obj_classes[i]} {str(class_score[i][5 + obj_classes[i]])[:4]}', (p1[0], p1[1] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 255), 2)
+            cv2.rectangle(img, p1, p2, (0, 255, 255), 3)
+        elif obj_classes[i] == 2:
+            cv2.putText(img, f'hair3 {obj_classes[i]} {str(class_score[i][5 + obj_classes[i]])[:4]}', (p1[0], p1[1] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+            cv2.rectangle(img, p1, p2, (0, 255, 0), 3)
+        elif obj_classes[i] == 3:
+            cv2.putText(img, f'hair4 {obj_classes[i]} {str(class_score[i][5 + obj_classes[i]])[:4]}', (p1[0], p1[1] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 0), 2)
+            cv2.rectangle(img, p1, p2, (255, 0, 0), 3)
+        elif obj_classes[i] == 4:
+            cv2.putText(img, f'hair5 {obj_classes[i]} {str(class_score[i][5 + obj_classes[i]])[:4]}', (p1[0], p1[1] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 0), 2)
+            cv2.rectangle(img, p1, p2, (255, 255, 0), 3)
+        elif obj_classes[i] == 5:
+            cv2.putText(img, f'hair_white {obj_classes[i]} {str(class_score[i][5 + obj_classes[i]])[:4]}', (p1[0], p1[1] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
+            cv2.rectangle(img, p1, p2, (255, 255, 255), 3)
 
     cv2.imwrite('out.png', img)
 

@@ -17,9 +17,8 @@ test: # test images (optional)
 
 # Classes
 names:
-  0: hair2
-  1: hair1
-  2: hair_white
-  3: hair3
-  4: hair4
-  5: hair5
+  0: hair1
+  1: hair2
+  2: hair3
+  3: hair4
+  4: hair5
