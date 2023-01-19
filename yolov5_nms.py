@@ -4,7 +4,7 @@ import numpy as np
 import os
 
 
-INPUT_PATH = 'data/images/scalp2.jpg'
+INPUT_PATH = 'data/images/0131_A2LEBJJDE00166C_1604644989841_5_RH.jpg'
 model_tf = tf.lite.Interpreter('pretrained/best.tflite')
 
 
@@ -58,22 +58,22 @@ def prediction_to_box(pred, img):
         # cv2.putText(img, f'Class {obj_classes[i]} {str(class_score[i][5 + obj_classes[i]])[:4]}', (p1[0], p1[1] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 128), 2)
 
         if obj_classes[i] == 0:
-            cv2.putText(img, f'hair1 {obj_classes[i]} {str(class_score[i][5 + obj_classes[i]])[:4]}', (p1[0], p1[1] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
+            cv2.putText(img, f'hair1 {str(class_score[i][5 + obj_classes[i]])[:4]}', (p1[0], p1[1] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
             cv2.rectangle(img, p1, p2, (0, 0, 255), 3)
         elif obj_classes[i] == 1:
-            cv2.putText(img, f'hair2 {obj_classes[i]} {str(class_score[i][5 + obj_classes[i]])[:4]}', (p1[0], p1[1] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 255), 2)
+            cv2.putText(img, f'hair2 {str(class_score[i][5 + obj_classes[i]])[:4]}', (p1[0], p1[1] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 255), 2)
             cv2.rectangle(img, p1, p2, (0, 255, 255), 3)
         elif obj_classes[i] == 2:
-            cv2.putText(img, f'hair3 {obj_classes[i]} {str(class_score[i][5 + obj_classes[i]])[:4]}', (p1[0], p1[1] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+            cv2.putText(img, f'hair3 {str(class_score[i][5 + obj_classes[i]])[:4]}', (p1[0], p1[1] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
             cv2.rectangle(img, p1, p2, (0, 255, 0), 3)
         elif obj_classes[i] == 3:
-            cv2.putText(img, f'hair4 {obj_classes[i]} {str(class_score[i][5 + obj_classes[i]])[:4]}', (p1[0], p1[1] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 0), 2)
+            cv2.putText(img, f'hair4 {str(class_score[i][5 + obj_classes[i]])[:4]}', (p1[0], p1[1] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 0), 2)
             cv2.rectangle(img, p1, p2, (255, 0, 0), 3)
         elif obj_classes[i] == 4:
-            cv2.putText(img, f'hair5 {obj_classes[i]} {str(class_score[i][5 + obj_classes[i]])[:4]}', (p1[0], p1[1] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 0), 2)
+            cv2.putText(img, f'hair5 {str(class_score[i][5 + obj_classes[i]])[:4]}', (p1[0], p1[1] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 0), 2)
             cv2.rectangle(img, p1, p2, (255, 255, 0), 3)
         elif obj_classes[i] == 5:
-            cv2.putText(img, f'hair_white {obj_classes[i]} {str(class_score[i][5 + obj_classes[i]])[:4]}', (p1[0], p1[1] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
+            cv2.putText(img, f'hair_white {str(class_score[i][5 + obj_classes[i]])[:4]}', (p1[0], p1[1] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
             cv2.rectangle(img, p1, p2, (255, 255, 255), 3)
 
     cv2.imwrite('out.png', img)
@@ -84,7 +84,7 @@ input_details = model_tf.get_input_details()
 output_details = model_tf.get_output_details()
 
 img_src = cv2_imread(INPUT_PATH, cv2.IMREAD_COLOR)
-img_src = cv2.resize(img_src, (640, 640))
+img_src = cv2.resize(img_src, (512, 512))
 
 img_tf = img_src / 255.0
 img_tf = img_tf.astype(np.float32)
