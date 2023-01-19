@@ -35,7 +35,8 @@ def xywh2xyxy(x):
 
 
 def prediction_to_box(pred, img):
-    x_mask_conf = pred[..., 4] > 0.45
+    score_th = 0.35
+    x_mask_conf = pred[..., 4] > score_th
     pred_high_conf = pred[x_mask_conf]
     for i in range(5, len(pred_high_conf[0, 5:])):
         pred_high_conf[:, i] = pred_high_conf[:, 4] * pred_high_conf[:, i]  # object_conf * class_conf
@@ -43,10 +44,11 @@ def prediction_to_box(pred, img):
     obj_scores = pred_high_conf[:, 4]
     obj_classes = pred_high_conf[:, 5:].argmax(axis=1)  # sort class_conf
 
-    out = cv2.dnn.NMSBoxes(obj_boxes, obj_scores, 0.45, 0.4)
+    # NMS
+    out = cv2.dnn.NMSBoxes(obj_boxes, obj_scores, score_th, 0.8)
     obj_boxes = obj_boxes[out]
     obj_classes = obj_classes[out]
-    class_score = pred_high_conf[out]
+    pred_high_conf = pred_high_conf[out]
 
     for i in range(len(obj_boxes)):
         p1 = [int(obj_boxes[i][0]), int(obj_boxes[i][1])]
@@ -58,22 +60,22 @@ def prediction_to_box(pred, img):
         # cv2.putText(img, f'Class {obj_classes[i]} {str(class_score[i][5 + obj_classes[i]])[:4]}', (p1[0], p1[1] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 128), 2)
 
         if obj_classes[i] == 0:
-            cv2.putText(img, f'hair1 {str(class_score[i][5 + obj_classes[i]])[:4]}', (p1[0], p1[1] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
+            cv2.putText(img, f'hair1 {str(pred_high_conf[i][5 + obj_classes[i]])[:4]}', (p1[0], p1[1] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
             cv2.rectangle(img, p1, p2, (0, 0, 255), 3)
         elif obj_classes[i] == 1:
-            cv2.putText(img, f'hair2 {str(class_score[i][5 + obj_classes[i]])[:4]}', (p1[0], p1[1] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 255), 2)
+            cv2.putText(img, f'hair2 {str(pred_high_conf[i][5 + obj_classes[i]])[:4]}', (p1[0], p1[1] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 255), 2)
             cv2.rectangle(img, p1, p2, (0, 255, 255), 3)
         elif obj_classes[i] == 2:
-            cv2.putText(img, f'hair3 {str(class_score[i][5 + obj_classes[i]])[:4]}', (p1[0], p1[1] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+            cv2.putText(img, f'hair3 {str(pred_high_conf[i][5 + obj_classes[i]])[:4]}', (p1[0], p1[1] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
             cv2.rectangle(img, p1, p2, (0, 255, 0), 3)
         elif obj_classes[i] == 3:
-            cv2.putText(img, f'hair4 {str(class_score[i][5 + obj_classes[i]])[:4]}', (p1[0], p1[1] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 0), 2)
+            cv2.putText(img, f'hair4 {str(pred_high_conf[i][5 + obj_classes[i]])[:4]}', (p1[0], p1[1] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 0), 2)
             cv2.rectangle(img, p1, p2, (255, 0, 0), 3)
         elif obj_classes[i] == 4:
-            cv2.putText(img, f'hair5 {str(class_score[i][5 + obj_classes[i]])[:4]}', (p1[0], p1[1] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 0), 2)
+            cv2.putText(img, f'hair5 {str(pred_high_conf[i][5 + obj_classes[i]])[:4]}', (p1[0], p1[1] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 0), 2)
             cv2.rectangle(img, p1, p2, (255, 255, 0), 3)
         elif obj_classes[i] == 5:
-            cv2.putText(img, f'hair_white {str(class_score[i][5 + obj_classes[i]])[:4]}', (p1[0], p1[1] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
+            cv2.putText(img, f'hair_white {str(pred_high_conf[i][5 + obj_classes[i]])[:4]}', (p1[0], p1[1] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
             cv2.rectangle(img, p1, p2, (255, 255, 255), 3)
 
     cv2.imwrite('out.png', img)
