@@ -8,7 +8,7 @@
 
 
 # Train/val/test sets as 1) dir: path/to/imgs, 2) file: path/to/imgs.txt, or 3) list: [path/to/imgs1, path/to/imgs2, ..]
-path: /mnt/prj/users/ssy/dataset/Lululab/scalp/230118_labeler_round_1
+path: /lulu_data/data/ssy/lululab/scalp/230130_labeler_round_2
 train: # train images (relative to 'path')
   - train
 val: # val images (relative to 'path')
