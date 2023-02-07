@@ -5,7 +5,7 @@ import os
 import copy
 
 
-INPUT_PATH = 'data/images/2023_02_02_16_14_40_330.png'
+INPUT_PATH = 'data/images/2023_01_17_14_28_28_277.png' # 2023_01_17_15_34_25_605, 2023_01_17_14_28_28_277, 2023_02_02_16_14_40_330
 model_tf = tf.lite.Interpreter('pretrained/best.tflite')
 
 
@@ -36,13 +36,10 @@ def xywh2xyxy(x):
 
 
 def prediction_to_box(pred, img):
-    score_th = 0.05
-    # @@@@@@@@@@@@@@@@@ obj class confidence 기준으로 자르기!!!
-    pred_high_conf = copy.deepcopy(pred[0])
-    # pred_high_conf = pred[pred[..., 4] > score_th]
+    score_th = 0.1
+    pred_high_conf = pred[pred[..., 4] > score_th]
     for i in range(5, len(pred_high_conf[0, 5:])):  # for all classes
         pred_high_conf[:, i] = pred_high_conf[:, 4] * pred_high_conf[:, i]  # object_conf * class_conf
-        # pred_high_conf[:, i] = pred_high_conf[:, i][pred_high_conf[:, i] > score_th]    # confidence로 자르기 @@@@@@@@@@@@@@@@@
 
     obj_boxes = xywh2xyxy(pred_high_conf[:, :4])  # center_x, center_y, width, height) to (x1, y1, x2, y2)
     obj_scores = pred_high_conf[:, 4]
