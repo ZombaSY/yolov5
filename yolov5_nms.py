@@ -5,7 +5,7 @@ import os
 import copy
 
 
-INPUT_PATH = 'data/images/2023_01_17_15_50_01_524.png'
+INPUT_PATH = 'data/images/2023_02_02_16_14_40_330.png'
 model_tf = tf.lite.Interpreter('pretrained/best.tflite')
 
 
@@ -36,7 +36,7 @@ def xywh2xyxy(x):
 
 
 def prediction_to_box(pred, img):
-    score_th = 0.35
+    score_th = 0.05
     # @@@@@@@@@@@@@@@@@ obj class confidence 기준으로 자르기!!!
     pred_high_conf = copy.deepcopy(pred[0])
     # pred_high_conf = pred[pred[..., 4] > score_th]
@@ -49,7 +49,7 @@ def prediction_to_box(pred, img):
     obj_classes = pred_high_conf[:, 5:].argmax(axis=1)  # sort class_conf
 
     # NMS
-    out = cv2.dnn.NMSBoxes(obj_boxes, obj_scores, score_th, 0.8)
+    out = cv2.dnn.NMSBoxes(obj_boxes, obj_scores, score_th, 0.5)
     obj_boxes = obj_boxes[out]
     obj_classes = obj_classes[out]
     pred_high_conf = pred_high_conf[out]
