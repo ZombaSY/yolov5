@@ -1,1 +1,1 @@
-CUDA_VISIBLE_DEVICES=2 python3 export.py --weights pretrained/hair_det_512.pt --include onnx --imgsz 384
+CUDA_VISIBLE_DEVICES=2 python3 export.py --weights pretrained/hair_det_512.pt --include onnx --imgsz 512

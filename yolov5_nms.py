@@ -21,9 +21,8 @@ def cv2_imwrite(fns_img, img):
     result, encoded_img = cv2.imencode(extension, img)
 
     if result:
-        with open(fns_img, mode='w+b') as f:
+        with open(fns_img, mode='wb') as f:
             encoded_img.tofile(f)
-
 
 def xywh2xyxy(x):
     # Convert nx4 boxes from [x, y, w, h] to [x1, y1, x2, y2] where xy1=top-left, xy2=bottom-right
@@ -33,7 +32,6 @@ def xywh2xyxy(x):
     y[..., 2] = x[..., 0] + x[..., 2] / 2  # bottom right x
     y[..., 3] = x[..., 1] + x[..., 3] / 2  # bottom right y
     return y
-
 
 def prediction_to_box(pred, img):
     score_th = 0.1
